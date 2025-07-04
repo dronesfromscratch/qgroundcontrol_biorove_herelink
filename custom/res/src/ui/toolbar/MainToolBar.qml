@@ -148,7 +148,7 @@ Rectangle {
                 visible:                currentToolbar === flyViewToolbar
                 id: recordDistanceSlider
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin: ScreenTools.defaultFontPixelWidth * 2
+                leftPadding: ScreenTools.defaultFontPixelWidth * 2
                 stepSize: 0.5
                 from: 0.5
                 to: 10
@@ -162,9 +162,9 @@ Rectangle {
             // Minimium waypoint distance label
             Label {
                 visible:                currentToolbar === flyViewToolbar
-                Layout.leftMargin: ScreenTools.defaultFontPixelWidth * 2
+                leftPadding: ScreenTools.defaultFontPixelWidth * 2
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Waypoint Distance (m): " + CustomGPSWaypointRecoder.minimiumDistance
+                text: " Waypoint Distance (m): " + CustomGPSWaypointRecoder.minimiumDistance
                 color: "white"
                 //color: "black"
                 //font.pixelSize: 20
