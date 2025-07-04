@@ -16843,6 +16843,18 @@
         <field name="Range">2 50</field>
       </param>
     </parameters>
+    <parameters name="SERVO_FTW_">
+      <param humanName="Servo channel output bitmask" name="SERVO_FTW_MASK" documentation="Servo channel mask specifying FETtec ESC output." user="Standard">
+        <field name="Bitmask">0:SERVO1,1:SERVO2,2:SERVO3,3:SERVO4,4:SERVO5,5:SERVO6,6:SERVO7,7:SERVO8,8:SERVO9,9:SERVO10,10:SERVO11,11:SERVO12</field>
+        <field name="RebootRequired">True</field>
+      </param>
+      <param humanName="Servo channel reverse rotation bitmask" name="SERVO_FTW_RVMASK" documentation="Servo channel mask to reverse rotation of FETtec ESC outputs." user="Standard">
+        <field name="Bitmask">0:SERVO1,1:SERVO2,2:SERVO3,3:SERVO4,4:SERVO5,5:SERVO6,6:SERVO7,7:SERVO8,8:SERVO9,9:SERVO10,10:SERVO11,11:SERVO12</field>
+      </param>
+      <param humanName="Nr. electrical poles" name="SERVO_FTW_POLES" documentation="Number of motor electrical poles" user="Standard">
+        <field name="Range">2 50</field>
+      </param>
+    </parameters>
     <parameters name="SERVO_ROB_">
       <param humanName="Robotis servo position min" name="SERVO_ROB_POSMIN" documentation="Position minimum at servo min value. This should be within the position control range of the servos, normally 0 to 4095" user="Standard">
         <field name="Range">0 4095</field>

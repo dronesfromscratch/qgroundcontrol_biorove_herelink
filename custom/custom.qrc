@@ -1,10 +1,13 @@
 <RCC>
-    <qresource prefix="custom/img">
+    <qresource prefix="/custom/img">
+        <file alias="CustomAppIcon.png">res/Images/CustomAppIcon.png</file>
+        <file alias="horizontalLogoBlack.svg">res/Images/horizontalLogoBlack.svg</file>
+        <file alias="horizontalLogoWhite.svg">res/Images/horizontalLogoWhite.svg</file>
+        <file alias="roveronly.svg">res/Images/roveronly.svg</file>
     </qresource>
-    <qresource prefix="/qmlimages">
-    </qresource>
-    <qresource prefix="Custom/Widgets">
-    </qresource>
+    <qresource prefix="/qmlimages"/>
+    <qresource prefix="/Custom/Widgets"/>
     <qresource prefix="/qml">
+        <file alias="QGroundControl/Controls/MainToolBar.qml">res/src/ui/toolbar/MainToolBar.qml</file>
     </qresource>
 </RCC>

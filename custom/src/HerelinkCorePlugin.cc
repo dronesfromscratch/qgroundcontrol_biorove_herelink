@@ -1,3 +1,15 @@
+
+
+#include <QtQml>
+#include <QQmlEngine>
+#include <QDateTime>
+#include "QGCSettings.h"
+#include "MAVLinkLogManager.h"
+#include "SettingsManager.h"
+#include "AppMessages.h"
+#include "QmlComponentInfo.h"
+#include "QGCPalette.h"
+#include "TrajectoryPoints.h"
 #include "HerelinkCorePlugin.h"
 
 #include "AutoConnectSettings.h"
@@ -17,7 +29,15 @@ QGC_LOGGING_CATEGORY(HerelinkCorePluginLog, "HerelinkCorePluginLog")
 HerelinkCorePlugin::HerelinkCorePlugin(QGCApplication *app, QGCToolbox* toolbox)
     : QGCCorePlugin(app, toolbox)
 {
+    customGPSWaypointRecoder = new CustomGPSWaypointRecoder(toolbox, this);
+}
 
+// expose CustomGPSWaypointRecoder to QML
+QQmlApplicationEngine* HerelinkCorePlugin::createQmlApplicationEngine(QObject* parent)
+{
+    QQmlApplicationEngine* qmlEngine = QGCCorePlugin::createQmlApplicationEngine(parent);
+    qmlEngine->rootContext()->setContextProperty("CustomGPSWaypointRecoder", customGPSWaypointRecoder);
+    return qmlEngine;
 }
 
 void HerelinkCorePlugin::setToolbox(QGCToolbox* toolbox)

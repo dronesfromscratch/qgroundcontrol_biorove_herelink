@@ -1,11 +1,14 @@
 #pragma once
 
 #include "HerelinkOptions.h"
-
 #include "QGCCorePlugin.h"
 #include "QGCLoggingCategory.h"
-
 #include <QObject>
+#include "QGCOptions.h"
+#include "SettingsManager.h"
+#include "customgpswaypointrecoder.h"
+#include <QTranslator>
+
 
 Q_DECLARE_LOGGING_CATEGORY(HerelinkCorePluginLog)
 
@@ -33,4 +36,12 @@ private slots:
 
 private:
     HerelinkOptions* _herelinkOptions = nullptr;
+     CustomGPSWaypointRecoder* customGPSWaypointRecoder;
+
+public:
+        virtual QQmlApplicationEngine *createQmlApplicationEngine(QObject *parent) override;
+
+
 };
+
+

@@ -1,4 +1,4 @@
-message("Adding Custom Herelink Plugin")
+message("Adding Custom Herelink/Biorove Plugin")
 
 #-- Version control
 #   Major and minor versions are defined here (manually)
@@ -27,24 +27,8 @@ DEFINES += APP_VERSION_STR=\"\\\"$$CUSTOM_QGC_VERSION\\\"\"
 
 message(Custom QGC Version: $${CUSTOM_QGC_VERSION})
 
-# Branding
-
 DEFINES += CUSTOMHEADER=\"\\\"HerelinkCorePlugin.h\\\"\"
 DEFINES += CUSTOMCLASS=HerelinkCorePlugin
-
-TARGET   = Herelink-QGroundControl
-DEFINES += QGC_APPLICATION_NAME='"\\\"Herelink QGroundControl\\\""'
-
-DEFINES += QGC_ORG_NAME=\"\\\"cubepilot.org\\\"\"
-DEFINES += QGC_ORG_DOMAIN=\"\\\"org.cubepilot\\\"\"
-
-QGC_APP_NAME        = "Herelink QGroundControl"
-QGC_BINARY_NAME     = "Herelink-QGroundControl"
-QGC_ORG_NAME        = "Cubepilot"
-QGC_ORG_DOMAIN      = "org.cubepilot"
-QGC_ANDROID_PACKAGE = "org.cubepilot.herelink_qgroundcontrol"
-QGC_APP_DESCRIPTION = "Herelink QGroundControl"
-QGC_APP_COPYRIGHT   = "Copyright (C) 2024 Cubepilot. All rights reserved."
 
 # Remove code which the Herelink doesn't need
 DEFINES += \
@@ -56,33 +40,68 @@ DEFINES += \
 DEFINES += \
     QGC_HERELINK_AIRUNIT_VIDEO
 
-CONFIG += AndroidHomeApp
+# CONFIG += AndroidHomeApp
+
+# BIOROVE BRANDING -------------------------------------------------------------------------------------------------
+
+
+TARGET   = BioControl-Herelink
+DEFINES += QGC_APPLICATION_NAME='"\\\"Biorove GCS\\""'
+
+DEFINES += QGC_ORG_NAME=\"\\\"qgroundcontrol.org\\\"\"
+DEFINES += QGC_ORG_DOMAIN=\"\\\"org.qgroundcontrol\\\"\"
+
+QGC_APP_NAME        = "BioControl"
+QGC_BINARY_NAME     = "BioControl"
+QGC_ORG_NAME        = "Biorove"
+QGC_ORG_DOMAIN      = "org.biorove"
+QGC_ANDROID_PACKAGE = "org.custom.qgroundcontrol"
+QGC_APP_DESCRIPTION = "BioControl"
+QGC_APP_COPYRIGHT   = "Copyright (C) 2025 Biorove. All rights reserved."
+
+#END BIOROVE Branding ------------------------------------------------------------------------------------------------------
+
 
 # Our own, custom resources
-# Not yet used
-#RESOURCES += \
-#    $$PWD/custom.qrc
+message(Adding custom resources $$PWD/custom.qrc)
+RESOURCES += \
+    $$PWD/custom.qrc
 
 QML_IMPORT_PATH += \
    $$PWD/src
 
-# Herelink specific custom sources
+# Herelink and biorove specific custom sources
 SOURCES += \
     $$PWD/src/HerelinkCorePlugin.cc \
-    $$PWD/src/HerelinkOptions.cc \
+    $$PWD/src/HerelinkOptions.cc \    
+    $$PWD/src/customgpswaypointrecoder.cpp
 
 HEADERS += \
     $$PWD/src/HerelinkCorePlugin.h \
     $$PWD/src/HerelinkOptions.h \
+    $$PWD/src/customgpswaypointrecoder.h
+
+CUSTOM_QGC_VERSION = $${CUSTOM_QGC_VER_MAJOR}.$${CUSTOM_QGC_VER_MINOR}.$${CUSTOM_QGC_VER_BUILD}
+
+DEFINES -= GIT_VERSION=\"\\\"$$GIT_VERSION\\\"\"
+DEFINES += GIT_VERSION=\"\\\"$$CUSTOM_QGC_VERSION\\\"\"
+
 
 INCLUDEPATH += \
     $$PWD/src \
 
-# Herelink specific custom sources, for HDMI switching
+message(Custom QGC Version: $${CUSTOM_QGC_VERSION})
+
+#-------------------------------------------------------------------------------------
+# Custom Firmware/AutoPilot Plugin
+
+INCLUDEPATH += \    
+    $$PWD/src/FirmwarePlugin \
+    $$PWD/herelink \
+    $$PWD/src/AutoPilotPlugin
+
 message("Including custom Herelink sources for source switching")
 
 SOURCES += $$PWD/herelink/VideoStreamControl.cc
 HEADERS += $$PWD/herelink/VideoStreamControl.h
-INCLUDEPATH += $$PWD/herelink
 
-# Custom versions of a Herelink build should only add changes below here to prevent conflicts
