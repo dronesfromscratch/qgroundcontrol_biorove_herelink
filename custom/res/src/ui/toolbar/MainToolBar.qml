@@ -32,6 +32,7 @@ Rectangle {
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
+    property var    _appSettings:                       QGroundControl.settingsManager.appSettings
 
     QGCPalette { id: qgcPal }
 
@@ -116,36 +117,48 @@ Rectangle {
             }
 
             // Start/Stop Path Recording button
-            Button {
+            QGCButton {
                 id: customButton
                 anchors.verticalCenter: parent.verticalCenter
                 Layout.preferredHeight: viewButtonRow.height
-                visible:                currentToolbar === flyViewToolbar
+                visible:                currentToolbar === flyViewToolbar && _activeVehicle
                 text: CustomGPSWaypointRecoder.isRecording ? "Stop Path Recording" : "Start Path Recording"
+                caution: CustomGPSWaypointRecoder.isRecording
+
                 onClicked: {
                     if (CustomGPSWaypointRecoder.isRecording) {
                         CustomGPSWaypointRecoder.stopRecording()
-                        selectSaveRecordingFile.open()
+                        fileDialog.title =          qsTr("Save Mission Plan")
+                        fileDialog.planFiles =      true
+                        fileDialog.selectExisting = false
+                        fileDialog.nameFilters =   ["Plan (*.plan)", "All files (*)"]
+                        fileDialog.openForSave()
                     } else {
                         CustomGPSWaypointRecoder.startRecording()
                     }
                 }
-                // Save file dialog
-                FileDialog {
-                    id: selectSaveRecordingFile
-                    title: qsTr("Save Waypont record as mission?")
-                    selectFolder: false
-                    selectExisting: false
-                    defaultSuffix: "plan"
-                    onAccepted: {
-                        CustomGPSWaypointRecoder.saveMission(selectSaveRecordingFile.fileUrl)
+            QGCFileDialog
+                {
+                    id:             fileDialog
+                    folder:         _appSettings ? _appSettings.missionSavePath : ""
+
+                    property bool planFiles: true    ///< true: working with plan files, false: working with kml file
+
+                    onAcceptedForSave: {
+                        if (planFiles) {
+                             CustomGPSWaypointRecoder.saveMission(file)
+                        }
                         close()
                     }
+
                 }
+
+
             }
             // Minimium waypoint distance slider
             Slider {
-                visible:                currentToolbar === flyViewToolbar
+                visible:                currentToolbar === flyViewToolbar && _activeVehicle
+                enabled: !CustomGPSWaypointRecoder.isRecording
                 id: recordDistanceSlider
                 anchors.verticalCenter: parent.verticalCenter
                 leftPadding: ScreenTools.defaultFontPixelWidth * 2
@@ -161,13 +174,11 @@ Rectangle {
             }
             // Minimium waypoint distance label
             Label {
-                visible:                currentToolbar === flyViewToolbar
+                visible:                currentToolbar === flyViewToolbar && _activeVehicle
                 leftPadding: ScreenTools.defaultFontPixelWidth * 2
                 anchors.verticalCenter: parent.verticalCenter
-                text: " Waypoint Distance (m): " + CustomGPSWaypointRecoder.minimiumDistance
-                color: "white"
-                //color: "black"
-                //font.pixelSize: 20
+                text: "WP Distance: " + CustomGPSWaypointRecoder.minimiumDistance + "m"
+                color: qgcPal.text
                 font.family:        ScreenTools.demiboldFontFamily
                 font.pointSize:     ScreenTools.mediumFontPointSize
                 verticalAlignment: Text.AlignVCenter
@@ -178,13 +189,14 @@ Rectangle {
 
     //-------------------------------------------------------------------------
     //-- Branding Logo
-    /*
+
     Image {
+        //hide logo on herelink - no room
         anchors.right:          parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        visible:                currentToolbar !== planViewToolbar && _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+        visible:                false //currentToolbar !== planViewToolbar && _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
         fillMode:               Image.PreserveAspectFit
         source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
         mipmap:                 true
@@ -232,7 +244,7 @@ Rectangle {
             }
         }
     }
-*/
+
     // Small parameter download progress bar
     Rectangle {
         anchors.bottom: parent.bottom
